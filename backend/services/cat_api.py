@@ -1,9 +1,12 @@
-import os
 from typing import Any
 import requests
-from backend.config import Config
+# from backend.config import Config
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-CAT_API_KEY = Config.CAT_API_KEY
+# CAT_API_KEY = Config.CAT_API_KEY
+CAT_API_KEY = os.getenv("CAT_API_KEY")
 if not CAT_API_KEY:
     raise ValueError("CAT_API_KEY is not set in the environment variables.")
 
@@ -88,3 +91,9 @@ if __name__ == "__main__":
     print("Fetching 1 random cat image...")
     one_random_image = get_cat_urls(number=1)
     print("One Random Cat Image:", one_random_image)
+
+    # Test case 5: Get 1 siamese cat image
+    print("Fetching 1 siamese cat image...")
+    siamese_image = get_cat_urls(breed="Siamese", number=1)
+    print("Siamese Cat Image:", siamese_image)
+
