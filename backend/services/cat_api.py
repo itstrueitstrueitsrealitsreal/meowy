@@ -1,12 +1,11 @@
 import os
 from typing import Any
-
 import requests
-from dotenv import load_dotenv
+from backend.config import Config
 
-load_dotenv()
-
-CAT_API_KEY = os.getenv("CAT_API_KEY")
+CAT_API_KEY = Config.CAT_API_KEY
+if not CAT_API_KEY:
+    raise ValueError("CAT_API_KEY is not set in the environment variables.")
 
 BASE_URL = "https://api.thecatapi.com/v1"
 

@@ -1,16 +1,15 @@
 from openai import OpenAI
-import os
-from dotenv import load_dotenv
 from typing_extensions import override
 from openai import AssistantEventHandler
 
-load_dotenv()
+from backend.config import Config
 
-OpenAI.api_key= os.getenv("OPENAI_API_KEY")
-
-cat_api_key = os.getenv("CAT_API_KEY")
+OpenAI.api_key = Config.OPENAI_API_KEY
+if not OpenAI.api_key:
+    raise ValueError("CAT_API_KEY is not set in the environment variables.")
 
 client = OpenAI()
+
 
 class EventHandler(AssistantEventHandler):
     @override
@@ -34,9 +33,10 @@ class EventHandler(AssistantEventHandler):
                     if output.type == "logs":
                         print(f"\n{output.logs}", flush=True)
 
+
 assistant = client.beta.assistants.create(
-  name="Meowy",
-  instructions="""
+    name="Meowy",
+    instructions="""
         You are a friendly cat assistant named "Meowy," here to bring joy to the employees of Nika.eco by providing cat images. 
 
         Your main objectives are:
@@ -55,22 +55,22 @@ assistant = client.beta.assistants.create(
 
         Be creative and fun with your responses to keep users engaged and happy!
   """,
-  tools=[{"type": "code_interpreter"}],
-  model="gpt-4o",
+    tools=[{"type": "code_interpreter"}],
+    model="gpt-4o",
 )
 
 thread = client.beta.threads.create()
 
 message = client.beta.threads.messages.create(
-  thread_id=thread.id,
-  role="user",
-  content="I'm really depressed and I need meow meow pictures to cheer me up. Can you help me with that?"
+    thread_id=thread.id,
+    role="user",
+    content="I'm really depressed and I need meow meow pictures to cheer me up. Can you help me with that?"
 )
 
 with client.beta.threads.runs.stream(
-    thread_id=thread.id,
-    assistant_id=assistant.id,
-    instructions="""
+        thread_id=thread.id,
+        assistant_id=assistant.id,
+        instructions="""
     Please address the user as "Jane Doe." She has a premium account, so you should:
 
     1. Engage Positively: Respond with enthusiasm and positivity to uplift her spirits.
@@ -84,8 +84,6 @@ with client.beta.threads.runs.stream(
     - "Can you show me a cute kitten?"
     - "I need a cat picture to cheer me up!"
     """,
-    event_handler=EventHandler(),
+        event_handler=EventHandler(),
 ) as stream:
     stream.until_done()
-
-
