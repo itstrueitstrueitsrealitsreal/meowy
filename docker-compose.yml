@@ -1,7 +1,7 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  fastapi:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -12,3 +12,14 @@ services:
     env_file:
       - ./backend/.env
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: yarn dev
