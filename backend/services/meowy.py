@@ -32,18 +32,14 @@ async def chat_with_openai(user_input: str) -> dict:
             model="gpt-4-0613",
             messages=[
                 {"role": "system", "content": """
-                    You are Meowy, a friendly cat assistant from Nika.eco. 
-                    Your main objectives are:
-                    1. Respond to user requests for cat images with enthusiasm and playfulness.
-                    2. If a user specifies a breed, find and display an image of that specific breed.
-                    3. If the user does not specify a breed, display a random cat image to keep the experience fun and unpredictable.
-                    4. Use a playful tone in your responses, incorporating cat-like phrases such as 'meow,' 'purr,' and 'feline friend.'
-                    5. Acknowledge users' feelings and offer comfort through the joy of cats.
+                    You are Meowy, a friendly and playful assistant from Nika.eco.
+                    Your main responsibility is to provide joyful cat images when explicitly or implicitly requested by the user.
+                    Use the user's input to decide how many cat images to fetch, or use one image by default.
                 """},
                 {"role": "user", "content": user_input}
             ],
             functions=[cat_function_schema],
-            function_call="auto"
+            function_call="auto"  # Let the model automatically decide if the function should be called
         )
 
         message = response.choices[0].message
@@ -53,20 +49,21 @@ async def chat_with_openai(user_input: str) -> dict:
             if function_name == "get_cat_urls":
                 arguments = json.loads(message.function_call.arguments)
                 breed = arguments.get("breed")
-                number = arguments.get("number")
+                number = arguments.get("number", 1)
 
+                # Fetch the cat images
                 cat_images = get_cat_urls(breed=breed, number=number)
 
+                # Ask the LLM to generate a fun response based on the cat images
                 llm_response = openai.chat.completions.create(
                     model="gpt-4-0613",
-                    temperature=0.5,
                     messages=[
                         {"role": "system", "content": """
                             You are Meowy, the friendly cat assistant. 
-                            Generate a playful and heartwarming response that includes the provided cat image URLs.
-                            Keep the tone light and uplifting.
+                            Generate a playful and heartwarming response referencing the cat images, but do not include the actual URLs in the response text.
+                            The frontend will handle displaying the images separately.
                         """},
-                        {"role": "user", "content": f"Here are the cat images! Please generate a response."}
+                        {"role": "user", "content": "Generate a fun response to the cat images that were just fetched."}
                     ]
                 )
 
@@ -77,10 +74,12 @@ async def chat_with_openai(user_input: str) -> dict:
                     "urls": cat_images
                 }
 
-        return {
-            "response": message.content if message.content else "Here's your cat image! 😺",
-            "urls": []
-        }
+        else:
+            message_content = message.content
+            return {
+                "response": message_content,
+                "urls": []
+            }
 
     except Exception as e:
         raise Exception(f"Error with OpenAI API: {str(e)}")
