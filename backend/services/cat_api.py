@@ -1,12 +1,8 @@
 from typing import Any
 import requests
-# from backend.config import Config
-import os
-from dotenv import load_dotenv
-load_dotenv()
+from backend.config import Config
 
-# CAT_API_KEY = Config.CAT_API_KEY
-CAT_API_KEY = os.getenv("CAT_API_KEY")
+CAT_API_KEY = Config.CAT_API_KEY
 if not CAT_API_KEY:
     raise ValueError("CAT_API_KEY is not set in the environment variables.")
 
@@ -52,7 +48,6 @@ def get_cat_urls(breed=None, number=1) -> list[str]:
     breed_id = get_id(breed)
 
     if breed_id:
-        # If breed ID is found, fetch breed-specific images
         response = requests.get(f"{BASE_URL}/images/search?breed_ids={breed_id}&limit={number}", headers=HEADERS)
         if response.status_code == 200:
             data = response.json()
@@ -62,7 +57,6 @@ def get_cat_urls(breed=None, number=1) -> list[str]:
             print("Error fetching image:", response.status_code)
             return []
     else:
-        # If no breed is specified, fetch random cat images
         response = requests.get(f"{BASE_URL}/images/search?limit={number}", headers=HEADERS)
         if response.status_code == 200:
             data = response.json()

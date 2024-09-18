@@ -39,7 +39,7 @@ async def chat_with_openai(user_input: str) -> dict:
                 {"role": "user", "content": user_input}
             ],
             functions=[cat_function_schema],
-            function_call="auto"  # Let the model automatically decide if the function should be called
+            function_call="auto"
         )
 
         message = response.choices[0].message
@@ -51,10 +51,8 @@ async def chat_with_openai(user_input: str) -> dict:
                 breed = arguments.get("breed")
                 number = arguments.get("number", 1)
 
-                # Fetch the cat images
                 cat_images = get_cat_urls(breed=breed, number=number)
 
-                # Ask the LLM to generate a fun response based on the cat images
                 llm_response = openai.chat.completions.create(
                     model="gpt-4-0613",
                     messages=[
