@@ -26,18 +26,28 @@ cat_function_schema = {
     }
 }
 
-async def chat_with_openai(user_input: str) -> dict:
+
+async def chat_with_openai(user_input: str, history: list = None) -> dict:
+    """
+    Sends user input along with conversation history to OpenAI's API and processes the response.
+    """
     try:
+        messages = [
+            {"role": "system", "content": """
+                You are Meowy, a friendly and playful assistant from Nika.eco.
+                Your main responsibility is to provide joyful cat images when explicitly or implicitly requested by the user.
+                Use the user's input and conversation history to decide how many cat images to fetch, or use one image by default.
+            """}
+        ]
+
+        if history:
+            messages += history
+
+        messages.append({"role": "user", "content": user_input})
+
         response = openai.chat.completions.create(
             model="gpt-4-0613",
-            messages=[
-                {"role": "system", "content": """
-                    You are Meowy, a friendly and playful assistant from Nika.eco.
-                    Your main responsibility is to provide joyful cat images when explicitly or implicitly requested by the user.
-                    Use the user's input to decide how many cat images to fetch, or use one image by default.
-                """},
-                {"role": "user", "content": user_input}
-            ],
+            messages=messages,
             functions=[cat_function_schema],
             function_call="auto"
         )
