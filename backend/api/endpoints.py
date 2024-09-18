@@ -1,7 +1,7 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
-from backend.services.meowy import chat_with_openai
+from services.meowy import chat_with_openai
 from fastapi.responses import JSONResponse
 
 router = APIRouter()

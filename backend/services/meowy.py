@@ -1,7 +1,7 @@
 import openai
 import json
-from backend.config import Config
-from backend.services.cat_api import get_cat_urls
+from config import Config
+from services.cat_api import get_cat_urls
 
 openai.api_key = Config.OPENAI_API_KEY
 

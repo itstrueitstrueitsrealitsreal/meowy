@@ -1,6 +1,6 @@
 from typing import Any
 import requests
-from backend.config import Config
+from config import Config
 
 CAT_API_KEY = Config.CAT_API_KEY
 if not CAT_API_KEY:
