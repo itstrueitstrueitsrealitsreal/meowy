@@ -91,3 +91,8 @@ if __name__ == "__main__":
     siamese_image = get_cat_urls(breed="Siamese", number=1)
     print("Siamese Cat Image:", siamese_image)
 
+    # Test case 6: Get id of siamese cat
+    print("Fetching id of Siamese cat...")
+    siamese_id = get_id(breed="Siamese")
+    print("Siamese Cat ID:", siamese_id)
+

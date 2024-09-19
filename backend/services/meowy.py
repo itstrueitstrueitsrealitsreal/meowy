@@ -1,7 +1,7 @@
 import openai
 import json
 from config import Config
-from services.cat_api import get_cat_urls
+from services.cat_api import get_cat_urls, get_id
 
 openai.api_key = Config.OPENAI_API_KEY
 
@@ -26,7 +26,6 @@ cat_function_schema = {
     }
 }
 
-
 async def chat_with_openai(user_input: str, history: list = None) -> dict:
     """
     Sends user input along with conversation history to OpenAI's API and processes the response.
@@ -34,9 +33,9 @@ async def chat_with_openai(user_input: str, history: list = None) -> dict:
     try:
         messages = [
             {"role": "system", "content": """
-                You are Meowy, a friendly and playful assistant from Nika.eco.
-                Your main responsibility is to provide joyful cat images when explicitly or implicitly requested by the user.
-                Use the user's input and conversation history to decide how many cat images to fetch, or use one image by default.
+                You are Meowy, a friendly and engaging assistant who is part of the Cat Delivery Network.
+                Your goal is to provide enjoyable responses and cat images when users ask for them.
+                If the user specifies a breed, show an image of that breed if possible, otherwise provide a random cat image.
             """}
         ]
 
@@ -61,21 +60,31 @@ async def chat_with_openai(user_input: str, history: list = None) -> dict:
                 breed = arguments.get("breed")
                 number = arguments.get("number", 1)
 
-                cat_images = get_cat_urls(breed=breed, number=number)
+                if not get_id(breed):
+                    breed_error_msg = f"Sorry, we couldn't find any images of the '{breed}' breed. But here's a cute random cat instead!"
+                    cat_images = get_cat_urls(breed=None, number=number)  
+                else:
+                    cat_images = get_cat_urls(breed=breed, number=number)
 
+                    breed_error_msg = None
+
+                # Generate the final response message with breed validation
                 llm_response = openai.chat.completions.create(
                     model="gpt-4-0613",
                     messages=[
-                        {"role": "system", "content": """
-                            You are Meowy, the friendly cat assistant. 
-                            Generate a playful and heartwarming response referencing the cat images, but do not include the actual URLs in the response text.
-                            The frontend will handle displaying the images separately.
+                        {"role": "system", "content": f"""
+                            You are Meowy, the friendly cat assistant who is part of the Cat Delivery Network.
+                            Generate a warm and engaging response, keeping the tone casual and fun.
+                            Mention a fun fact about {breed}.
                         """},
-                        {"role": "user", "content": "Generate a fun response to the cat images that were just fetched."}
+                        {"role": "user", "content": "Generate a response to the cat images that were just fetched, and a fun fact about the breed if valid."}
                     ]
                 )
 
                 llm_message = llm_response.choices[0].message.content
+
+                if breed_error_msg:
+                    llm_message = breed_error_msg + "\n\n" + llm_message
 
                 return {
                     "response": llm_message,
@@ -83,6 +92,7 @@ async def chat_with_openai(user_input: str, history: list = None) -> dict:
                 }
 
         else:
+            # No function call was made, return the assistant's response directly
             message_content = message.content
             return {
                 "response": message_content,
