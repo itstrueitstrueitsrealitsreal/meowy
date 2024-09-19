@@ -56,23 +56,25 @@ Meowy is a cat chatbot designed to boost motivation by providing users with ador
 ### Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/meowy.git
    cd meowy
    ```
+
 2. Create a `.env` file with your obtained **OpenAI API Key** and **CatAPI Key**, and place it in the `backend` directory.
 3. Run the following lines in the root directory to start the app:
 
-```bash
-docker compose build
-docker compose up
-```
+   ```bash
+   docker compose build
+   docker compose up
+   ```
 
 4. To stop the app, run the following line of code:
 
-```bash
-docker compose down
-```
+   ```bash
+   docker compose down
+   ```
 
 ### API Endpoints
 
