@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import LLMOutputRenderer from "@/components/LLMOutputRenderer";
 import { ImageGallery } from "@/components/ImageGallery";
 import { MeowyAlert } from "@/components/MeowyAlert";
-import { Loading } from "@/components/Loading"; // Import Loading component
+import { Loading } from "@/components/Loading";
 
 const Page = () => {
   const [messages, setMessages] = useState<
@@ -23,7 +23,7 @@ const Page = () => {
       isMeowy?: boolean;
       showGallery?: boolean;
       imageUrls?: string[];
-      isLoading?: boolean; // New flag to track if this specific message is loading
+      isLoading?: boolean;
     }[]
   >([]);
   const [inputValue, setInputValue] = useState("");
@@ -41,30 +41,26 @@ const Page = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Handle sending the message
   const sendMessage = async () => {
     if (inputValue.trim()) {
       // Add user's message to the chat
       setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
       setInputValue("");
 
-      // Add a loading message for Meowy
       setMessages((prev) => [
         ...prev,
         {
           sender: "meowy",
-          text: "", // Empty for now until response is received
+          text: "",
           isMeowy: true,
-          isLoading: true, // Set loading to true for this message
+          isLoading: true,
         },
       ]);
 
-      // Scroll to bottom after user input
       scrollToBottom();
 
       try {
-        // Send request to backend
-        const response = await fetch("http://localhost:8000/api/chat/", {
+        const response = await fetch("https://meowy.onrender.com/api/chat/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -76,12 +72,11 @@ const Page = () => {
         const data = await response.json();
         const showGallery = data.urls.length > 0;
 
-        // Update the last message (Meowy's loading message) with the actual response
         setMessages((prev) => {
           const updatedMessages = [...prev];
           const lastMessage = updatedMessages[updatedMessages.length - 1];
           lastMessage.text = data.response;
-          lastMessage.isLoading = false; // Set loading to false
+          lastMessage.isLoading = false;
           lastMessage.showGallery = showGallery;
           lastMessage.imageUrls = data.urls;
           return updatedMessages;

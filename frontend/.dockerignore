@@ -1,0 +1,17 @@
+node_modules
+
+logs
+*.log
+npm-debug.log*
+
+dist
+build
+
+.env
+
+.DS_Store
+
+tmp
+temp
+*.tmp
+*.temp
