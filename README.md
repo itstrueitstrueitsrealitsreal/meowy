@@ -15,6 +15,8 @@ Meowy is a cat chatbot designed to boost motivation by providing users with ador
 ### Not Implemented
 
 - **Real-time Streaming Output**: Streaming responses to the UI are not yet implemented.
+- **Authentication**: Allow users to login to access chat history.
+- **Persistent Chats**: Allow users' chats to be stored in a database server.
 
 ## Tech Stack
 
