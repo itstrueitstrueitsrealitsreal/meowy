@@ -30,7 +30,6 @@ const Page = () => {
   const [messageKey, setMessageKey] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when new messages are added
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -43,7 +42,6 @@ const Page = () => {
 
   const sendMessage = async () => {
     if (inputValue.trim()) {
-      // Add user's message to the chat
       setMessages((prev) => [...prev, { sender: "user", text: inputValue }]);
       setInputValue("");
 

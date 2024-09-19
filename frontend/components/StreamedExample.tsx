@@ -19,7 +19,6 @@ console.log('Hello llm-ui!');
 ![image](https://cdn2.thecatapi.com/images/7qv.jpg)
 `;
 
-// Main component to handle the streaming example
 const StreamedExample = () => {
   const { isStreamFinished, output } = useStreamExample(example);
 

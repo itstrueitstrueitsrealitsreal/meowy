@@ -23,8 +23,8 @@ export function ImageGallery({ imageUrls }: ImageGalleryProps) {
   React.useEffect(() => {
     if (!api) return;
 
-    setCount(api.scrollSnapList().length); // Set total slides
-    setCurrent(api.selectedScrollSnap() + 1); // Set current slide
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
 
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
@@ -38,7 +38,7 @@ export function ImageGallery({ imageUrls }: ImageGalleryProps) {
         plugins={[
           Autoplay({
             delay: 3000,
-            stopOnInteraction: true, // Continue autoplay even after user interaction
+            stopOnInteraction: true,
           }),
         ]}
         className="w-full max-w-xs"
@@ -54,7 +54,7 @@ export function ImageGallery({ imageUrls }: ImageGalleryProps) {
                       alt={`Cat ${index + 1}`}
                       width={300}
                       height={300}
-                      className="size-full rounded-lg object-cover" // Added rounded-lg class for rounded borders
+                      className="size-full rounded-lg object-cover"
                     />
                   </CardContent>
                 </Card>
@@ -67,7 +67,7 @@ export function ImageGallery({ imageUrls }: ImageGalleryProps) {
       </Carousel>
 
       {/* Bottom Caption */}
-      <div className="text-muted-foreground py-2 text-center text-sm">
+      <div className="py-2 text-center text-sm text-muted-foreground">
         Cat {current} of {count}
       </div>
     </div>
