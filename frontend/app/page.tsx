@@ -58,7 +58,7 @@ const Page = () => {
       scrollToBottom();
 
       try {
-        const response = await fetch("https://meowy.onrender.com/api/chat/", {
+        const response = await fetch("localhost:8000/api/chat/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -89,14 +89,12 @@ const Page = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-black p-4 text-white">
-      {/* Show Meowy Alert if no messages */}
       {messages.length === 0 && (
         <div className="flex h-screen w-full max-w-lg flex-grow flex-col items-center justify-center space-y-4 shadow-lg">
           <MeowyAlert />
         </div>
       )}
 
-      {/* Display messages if there are any */}
       {messages.length > 0 && (
         <div className="w-full max-w-lg flex-grow space-y-4 overflow-y-auto pb-24 shadow-lg">
           {messages.map((message, index) => (
@@ -114,7 +112,6 @@ const Page = () => {
               <CardContent>
                 {message.isMeowy ? (
                   <>
-                    {/* If loading, show loading skeleton */}
                     {message.isLoading ? (
                       <Loading />
                     ) : (
@@ -125,7 +122,6 @@ const Page = () => {
                       />
                     )}
 
-                    {/* Render Image Gallery if there are URLs */}
                     {message.showGallery && message.imageUrls && (
                       <div className="mt-4 flex items-center justify-center">
                         <ImageGallery imageUrls={message.imageUrls} />
@@ -142,7 +138,6 @@ const Page = () => {
         </div>
       )}
 
-      {/* Fixed Input Area */}
       <div className="fixed bottom-0 left-1/2 w-full max-w-lg -translate-x-1/2 transform bg-black p-4">
         <CardFooter className="flex space-x-2">
           <Input
