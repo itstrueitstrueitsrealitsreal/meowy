@@ -75,7 +75,7 @@ async def chat_with_openai(user_input: str, history: list = None) -> dict:
                         {"role": "system", "content": f"""
                             You are Meowy, the friendly cat assistant who is part of the Cat Delivery Network.
                             Generate a warm and engaging response, keeping the tone casual and fun.
-                            Mention a fun fact about {breed}.
+                            Mention a fun fact about {breed} if the breed is not None.
                         """},
                         {"role": "user", "content": "Generate a response to the cat images that were just fetched, and a fun fact about the breed if valid."}
                     ]
@@ -92,7 +92,6 @@ async def chat_with_openai(user_input: str, history: list = None) -> dict:
                 }
 
         else:
-            # No function call was made, return the assistant's response directly
             message_content = message.content
             return {
                 "response": message_content,
