@@ -2,7 +2,6 @@ import React from "react";
 import { useStreamExample, throttleBasic } from "@llm-ui/react";
 import LLMOutputRenderer from "./LLMOutputRenderer";
 
-// Example markdown with code blocks and an image
 const example = `## Python
 
 \`\`\`python

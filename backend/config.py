@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from the .env file
 load_dotenv()
 
 
@@ -19,5 +18,4 @@ class Config:
             raise ValueError("CAT_API_KEY is not set.")
 
 
-# Validate the configuration on startup
 Config.validate()

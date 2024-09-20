@@ -1,5 +1,5 @@
 import React from "react";
-import { useLLMOutput, ThrottleFunction } from "@llm-ui/react"; // Import the correct type
+import { useLLMOutput, ThrottleFunction } from "@llm-ui/react";
 import MarkdownComponent from "./MarkdownComponent";
 import CodeBlock from "./CodeBlock";
 import {

@@ -66,7 +66,6 @@ export function ImageGallery({ imageUrls }: ImageGalleryProps) {
         <CarouselNext />
       </Carousel>
 
-      {/* Bottom Caption */}
       <div className="py-2 text-center text-sm text-muted-foreground">
         Cat {current} of {count}
       </div>
